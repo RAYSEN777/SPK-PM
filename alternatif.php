@@ -82,7 +82,7 @@ if (isset($_GET['edit'])) {
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <h1>Sistem Pendukung Keputusan - Kelola Alternatif & Nilai</h1>
+    <h1>Sistem Pendukung Keputusan Profile Matching - Kelola Alternatif & Nilai</h1>
     <nav>
         <a href="index.php">[ Dashboard ]</a> | 
         <a href="kriteria.php">[ Kelola Kriteria ]</a> | 

@@ -17,7 +17,7 @@ $jumlah_alternatif = $r_alt['total'];
     <link rel="stylesheet" type="text/css" href="style.css"> 
 </head>
 <body>
-    <h1>Sistem Pendukung Keputusan - Dashboard</h1>
+    <h1>Sistem Pendukung Keputusan Profile Matching - Dashboard</h1>
     <nav>
         <a href="index.php" style="color: #2c3e50;"><b>[ Dashboard ]</b></a> | 
         <a href="kriteria.php">[ Kelola Kriteria ]</a> | 
