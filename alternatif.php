@@ -1,6 +1,39 @@
 <?php
 include 'koneksi.php';
 
+function konversi_nilai_asli($id_kriteria, $nilai_asli) {
+    $nilai_asli = (float)$nilai_asli;
+
+    switch ($id_kriteria) {
+        case 1: // C1 - Usia Pendaftar 
+            if ($nilai_asli <= 21) return 5;
+            if ($nilai_asli <= 23) return 4; 
+            if ($nilai_asli <= 25) return 3;
+            if ($nilai_asli <= 27) return 2;
+            if ($nilai_asli >= 28) return 1; 
+            return 5;
+
+        case 2: // C2 - IPK
+            if ($nilai_asli < 2.75) return 1;
+            if ($nilai_asli >= 2.75 && $nilai_asli <= 3.00) return 2;
+            if ($nilai_asli > 3.00 && $nilai_asli <= 3.25) return 3;
+            if ($nilai_asli > 3.25 && $nilai_asli <= 3.50) return 4;
+            if ($nilai_asli > 3.50) return 5;
+            return 1;
+
+        case 3: // C3 - Skor TOEFL
+            if ($nilai_asli < 350) return 1;
+            if ($nilai_asli >= 350 && $nilai_asli <= 400) return 2;
+            if ($nilai_asli >= 401 && $nilai_asli <= 450) return 3;
+            if ($nilai_asli >= 451 && $nilai_asli <= 500) return 4;
+            if ($nilai_asli > 500) return 5;
+            return 1;
+
+        default:
+            return $nilai_asli;
+    }
+}
+
 if (isset($_POST['simpan'])) {
     $id_alt = $_POST['id_alternatif'];
     $nama = $_POST['nama_alternatif'];
@@ -10,14 +43,18 @@ if (isset($_POST['simpan'])) {
         $id_baru = mysqli_insert_id($conn);
         
         foreach ($_POST['nilai'] as $id_krit => $nilai_val) {
-            mysqli_query($conn, "INSERT INTO nilai_alternatif (id_alternatif, id_kriteria, nilai_aktual) VALUES ('$id_baru', '$id_krit', '$nilai_val')");
+            // Konversi nilai terlebih dahulu sebelum disimpan
+            $nilai_konversi = konversi_nilai_asli($id_krit, $nilai_val);
+            mysqli_query($conn, "INSERT INTO nilai_alternatif (id_alternatif, id_kriteria, nilai_aktual) VALUES ('$id_baru', '$id_krit', '$nilai_konversi')");
         }
     } else {
         mysqli_query($conn, "UPDATE alternatif SET nama_alternatif='$nama' WHERE id_alternatif='$id_alt'");
         
         foreach ($_POST['nilai'] as $id_krit => $nilai_val) {
+            // Konversi nilai terlebih dahulu sebelum disimpan
+            $nilai_konversi = konversi_nilai_asli($id_krit, $nilai_val);
             mysqli_query($conn, "DELETE FROM nilai_alternatif WHERE id_alternatif='$id_alt' AND id_kriteria='$id_krit'");
-            mysqli_query($conn, "INSERT INTO nilai_alternatif (id_alternatif, id_kriteria, nilai_aktual) VALUES ('$id_alt', '$id_krit', '$nilai_val')");
+            mysqli_query($conn, "INSERT INTO nilai_alternatif (id_alternatif, id_kriteria, nilai_aktual) VALUES ('$id_alt', '$id_krit', '$nilai_konversi')");
         }
     }
     header("Location: alternatif.php");

@@ -27,6 +27,7 @@ if (!isset($nilai_terinput)) {
         </div>
 
         <h4 style="margin-top: 25px; margin-bottom: 10px; color: #2c3e50; font-size: 15px;">Input Nilai Aktual Kompetensi:</h4>
+        <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 15px;">Silakan masukkan nilai asli (Usia, IPK, TOEFL). Sistem akan mengonversi secara otomatis ke skala 1-5.</p>
         <hr style="margin-bottom: 15px; border: 1px solid #f4f6f9;">
         
         <?php
@@ -35,28 +36,51 @@ if (!isset($nilai_terinput)) {
         if (mysqli_num_rows($kriteria_query) == 0) {
             echo "<p style='color: #e74c3c; font-size: 13px; font-style: italic;'>Belum ada data kriteria. Silakan isi kriteria terlebih dahulu.</p>";
         } else {
+            $i = 1; 
             while ($k = mysqli_fetch_assoc($kriteria_query)) {
-                
                 $val_aktual = isset($nilai_terinput[$k['id_kriteria']]) ? $nilai_terinput[$k['id_kriteria']] : '';
+                
+                $min = "1";
+                $max = "5";
+                $step = "0.1";
+                $placeholder = "Masukkan skor (1-5)";
+
+                if ($i == 1) { // C1 - Usia
+                    $min = "15";
+                    $max = "60";
+                    $step = "1";
+                    $placeholder = "Contoh: 24 (Tahun)";
+                } elseif ($i == 2) { // C2 - IPK
+                    $min = "0.00";
+                    $max = "4.00";
+                    $step = "0.01";
+                    $placeholder = "Contoh: 3.50";
+                } elseif ($i == 3) { // C3 - TOEFL
+                    $min = "200";
+                    $max = "677";
+                    $step = "1";
+                    $placeholder = "Contoh: 450";
+                }
                 ?>
                 <div class="form-group" style="margin-bottom: 15px;">
                     <label style="display: block; font-weight: 600; margin-bottom: 3px; color: #2c3e50; font-size: 13px;">
                         <?= $k['nama_kriteria']; ?> 
                         <span style="font-weight: normal; color: #7f8c8d; font-size: 12px;">
-                            (Target Standar: <b><?= $k['nilai_target']; ?></b> | Bobot: <?= $k['bobot_kriteria']; ?>%)
+                            (Target: <b><?= $k['nilai_target']; ?></b> | Bobot: <?= $k['bobot_kriteria']; ?>%)
                         </span>
                     </label>
                     <input type="number" 
                            name="nilai[<?= $k['id_kriteria']; ?>]" 
-                           min="1" 
-                           max="5" 
-                           step="0.1" 
-                           placeholder="Masukkan nilai (1.0 - 5.0)" 
+                           min="<?= $min; ?>" 
+                           max="<?= $max; ?>" 
+                           step="<?= $step; ?>" 
+                           placeholder="<?= $placeholder; ?>" 
                            value="<?= $val_aktual; ?>" 
                            style="width: 100%; padding: 8px 10px; border: 1px solid #ced4da; border-radius: 5px; font-size: 13px;" 
                            required>
                 </div>
                 <?php
+                $i++;
             }
         }
         ?>
