@@ -33,7 +33,7 @@ $total_persen_sekarang = $row_bobot['total'] ?? 0;
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <h1>Sistem Pendukung Keputusan - Profile Kriteria</h1>
+    <h1>Sistem Pendukung Keputusan - Kelola Kriteria</h1>
     <nav>
         <a href="index.php">[ Dashboard ]</a> | 
         <a href="kriteria.php" style="color: #2c3e50;"> <b>[ Kelola Kriteria ]</b></a> | 
